@@ -28,5 +28,8 @@ html body{
 }
 .wrapper {
     background-size: contain; 
-    padding-bottom: 10px;
+    padding-bottom: 15px;
+}
+.page-footer {
+    background-color: antiquewhite;
 }
