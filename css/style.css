@@ -27,5 +27,6 @@ html body{
     height: 10%;
 }
 .wrapper {
-    background-size: contain;
+    background-size: contain; 
+    padding: 10px;
 }
