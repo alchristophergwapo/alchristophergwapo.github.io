@@ -1,15 +1,15 @@
 // basic functionalities
 
+// function for connect button
 $('#btn-connect').click(function(){
-	client = mqtt.connect("ws://broker.hivemq.com:8000/mqtt");
-	client.subscribe($("#topic").val());
-	
-	
+	var broker = $("#input-broker-ws").val();
+	client = mqtt.connect(broker);
 
-	console.log('connect button clicked');
 	$("#status").text("Connecting");
 	$("#status").removeClass("alert-secondary");
 	$("#status").addClass("alert-warning");
+
+	// connect callback function
 	client.on("connect", function(){
 		$("#status").text("Successfully connected");
 		$("#status").removeClass("alert-warning");
@@ -33,6 +33,7 @@ $('#btn-connect').click(function(){
 
   })
 
+	// function for disconnect button
 	$(".btn-disconnect").click(function() {
 		Swal.fire({
 			title: 'Are you sure?',
@@ -58,6 +59,7 @@ $('#btn-connect').click(function(){
 		
 	});
 
+	// function for publish button
 	$("#btn-pub").click(function() {
 		var topic = $("#topic").val();
 		var payload = $("#message").val();
@@ -86,41 +88,31 @@ $('#btn-connect').click(function(){
 					$("#tbl-body-pub").append($(row));
 				}
 			});
-			
-			
 		}
-
 	});
+
+	// function for subscribe button
 	$("#btn-sub").click(function() {
-		var topic = $("#topic").val();
-		var subscribe = $("#topic-sub").val();
-		if (subscribe != topic) {
-			Swal.fire({
-			  type: 'error',
-			  title: 'Oops...',
-			  text: 'Topic is not available!',
-			});
-		}
-		else if (subscribe == topic && topic !== "") {
-			client.subscribe(topic, function(err) {
-				if(err) {
-					Swal.fire({
-						type: 'error',
-						title: 'Oops...',
-						text: 'An error occurs!',
-					  });
-				} else {
-					var row = $("<tr>").attr("id", "mysub");
-					$("<td>").text(topic).appendTo($(row));
-					$("<td>").text(moment().format('MMMM Do YYYY, h:mm:ss a')).appendTo($(row));
-					$("#tbl-body-sub").append($(row));
-					Swal.fire('Subscribed successfully!');
-				}
-			});
-			
-		}
-			
+		var topic = $("#topic-sub").val();
+		
+		client.subscribe(topic, function(err) {
+			if(err) {
+				Swal.fire({
+					type: 'error',
+					title: 'Oops...',
+					text: 'An error occurs!',
+					});
+			} else {
+				var row = $("<tr>").attr("id", "mysub");
+				$("<td>").text(topic).appendTo($(row));
+				$("<td>").text(moment().format('MMMM Do YYYY, h:mm:ss a')).appendTo($(row));
+				$("#tbl-body-sub").append($(row));
+				Swal.fire('Subscribed successfully!');
+			}
+		});
 	})
+
+	// function for unsubscribe button
 	$("#btn-unsub").click(function() {
 			var topic = $("#topic").val();
 			client.unsubscribe(topic, function(err) {
